@@ -1,0 +1,6 @@
+S:\CG\Aufgabe1\Aufgabe2\bin\Debug\Aufgabe2.exe.config
+S:\CG\Aufgabe1\Aufgabe2\bin\Debug\Aufgabe2.exe
+S:\CG\Aufgabe1\Aufgabe2\bin\Debug\Aufgabe2.pdb
+S:\CG\Aufgabe1\Aufgabe2\obj\Debug\Aufgabe2.csprojResolveAssemblyReference.cache
+S:\CG\Aufgabe1\Aufgabe2\obj\Debug\Aufgabe2.exe
+S:\CG\Aufgabe1\Aufgabe2\obj\Debug\Aufgabe2.pdb
