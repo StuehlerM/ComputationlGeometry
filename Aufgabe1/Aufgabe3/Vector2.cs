@@ -11,7 +11,7 @@ namespace Aufgabe3
         public Point start { get; set; }
         public Point end { get; set; }
 
-        public static int insiders = 0;
+        //public static int insiders = 0;
 
         public Vector2(double sx, double sy, double ex, double ey)
         {
