@@ -42,10 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Events\EndEvent.cs" />
-    <Compile Include="Events\IEvent.cs" />
-    <Compile Include="Events\IntersectEvent.cs" />
-    <Compile Include="Events\StartEvent.cs" />
+    <Compile Include="Events\Event.cs" />
     <Compile Include="LineSweep.cs" />
     <Compile Include="Point.cs" />
     <Compile Include="Program.cs" />
