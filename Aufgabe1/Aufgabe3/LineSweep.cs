@@ -14,6 +14,8 @@ namespace Aufgabe3
         public LineSweep(List<Vector2> lines)
         {
             this.lines = lines;
+
+
         }
 
 
