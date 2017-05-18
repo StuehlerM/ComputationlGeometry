@@ -8,14 +8,21 @@ namespace Aufgabe3
 {
     class LineSweep
     {
-        List<Event> eventQueue = new List<Event>();
+        List<iEvent> eventQueue = new List<iEvent>();
         List<Vector2> lines = new List<Vector2>();
 
         public LineSweep(List<Vector2> lines)
         {
             this.lines = lines;
+
         }
 
+        private void initializeEventQueue()
+        {
+
+        }
+
+        private void TreatLeftEndpoint()
 
     }
 }
