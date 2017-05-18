@@ -4,3 +4,9 @@ S:\CG\Aufgabe1\Aufgabe1\bin\Debug\Aufgabe1.pdb
 S:\CG\Aufgabe1\Aufgabe1\obj\Debug\Aufgabe1.csprojResolveAssemblyReference.cache
 S:\CG\Aufgabe1\Aufgabe1\obj\Debug\Aufgabe1.exe
 S:\CG\Aufgabe1\Aufgabe1\obj\Debug\Aufgabe1.pdb
+C:\Users\flori\OneDrive\Dokumente\Uni-DESKTOP-4RIEQRB\Computational Geometry\Praktikum\Repo\Aufgabe1\Aufgabe1\bin\Debug\Aufgabe1.exe.config
+C:\Users\flori\OneDrive\Dokumente\Uni-DESKTOP-4RIEQRB\Computational Geometry\Praktikum\Repo\Aufgabe1\Aufgabe1\bin\Debug\Aufgabe1.exe
+C:\Users\flori\OneDrive\Dokumente\Uni-DESKTOP-4RIEQRB\Computational Geometry\Praktikum\Repo\Aufgabe1\Aufgabe1\bin\Debug\Aufgabe1.pdb
+C:\Users\flori\OneDrive\Dokumente\Uni-DESKTOP-4RIEQRB\Computational Geometry\Praktikum\Repo\Aufgabe1\Aufgabe1\obj\Debug\Aufgabe1.csprojResolveAssemblyReference.cache
+C:\Users\flori\OneDrive\Dokumente\Uni-DESKTOP-4RIEQRB\Computational Geometry\Praktikum\Repo\Aufgabe1\Aufgabe1\obj\Debug\Aufgabe1.exe
+C:\Users\flori\OneDrive\Dokumente\Uni-DESKTOP-4RIEQRB\Computational Geometry\Praktikum\Repo\Aufgabe1\Aufgabe1\obj\Debug\Aufgabe1.pdb
