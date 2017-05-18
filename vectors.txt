@@ -1,0 +1,11 @@
+Startpunkt: 0/0 Ende: 0,1/0,1 Startpunkt: 10/10 Ende: 10,1/10,1
+Startpunkt: 0/0 Ende: 0,1/0,1 Startpunkt: 10/10 Ende: 10/10
+Startpunkt: 10/10 Ende: 10,1/10,1 Startpunkt: 10/10 Ende: 10/10
+Startpunkt: 10/10 Ende: 10,1/10,1 Startpunkt: 10/10 Ende: 10/10,1
+Startpunkt: 10/10 Ende: 10,1/10,1 Startpunkt: 10/10 Ende: 10,1/10
+Startpunkt: 10/10 Ende: 10/10,1 Startpunkt: 10/10 Ende: 10,1/10
+Startpunkt: 72,675/25,331 Ende: 72,2035/25,216 Startpunkt: 72,651/25,149 Ende: 72,2693/25,329
+Startpunkt: 2,921/26,429 Ende: 2,9101/26,2454 Startpunkt: 2,295/25,856 Ende: 3,06992/26,4487
+Startpunkt: 11,592/89,627 Ende: 12,2213/88,9493 Startpunkt: 11,774/89,646 Ende: 11,662/89,2365
+Startpunkt: 43,499/49,031 Ende: 43,5973/49,499 Startpunkt: 43,794/49,185 Ende: 43,3651/48,9798
+Startpunkt: 55,103/11,578 Ende: 55,3611/11,6755 Startpunkt: 55,103/11,578 Ende: 55,3611/11,6755

@@ -17,10 +17,11 @@ namespace Aufgabe1
             int n_100000 = 0;
 
             Vector2[] vectors = reader.readFromFileToArray(@"S:\CG\Aufgabe1\Aufgabe1\s_1000_1.dat");
-            DateTime start_1000 = DateTime.Now;
-            for(int i = 0; i < vectors.Length - 1; i++)
+            System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
+            sw.Start();
+            for (int i = 0; i < vectors.Length - 1; i++)
             {
-                for(int j = i + 1; j < vectors.Length; j++)
+                for (int j = i + 1; j < vectors.Length; j++)
                 {
                     if (vectors[i].CheckForIntersection(vectors[i], vectors[j]))
                     {
@@ -28,11 +29,11 @@ namespace Aufgabe1
                     }
                 }
             }
-            DateTime end_1000 = DateTime.Now;
-            Console.WriteLine("Intersections at s_1000_1: " + n_1000 + " Time needed (ms): " + (end_1000 - start_1000).Milliseconds);
+            sw.Stop();
+            Console.WriteLine("Intersections at s_1000_1: " + n_1000 + " Time needed (ms): " + sw.ElapsedMilliseconds);
 
             vectors = reader.readFromFileToArray(@"S:\CG\Aufgabe1\Aufgabe1\s_10000_1.dat");
-            DateTime start_10000 = DateTime.Now;
+            sw.Restart();
             for (int i = 0; i < vectors.Length - 1; i++)
             {
                 for (int j = i + 1; j < vectors.Length; j++)
@@ -43,11 +44,11 @@ namespace Aufgabe1
                     }
                 }
             }
-            DateTime end_10000 = DateTime.Now;
-            Console.WriteLine("Intersections at s_10000_1: " + n_10000 + " Time needed (ms): " + (end_10000 - start_10000).Milliseconds);
+            sw.Stop();
+            Console.WriteLine("Intersections at s_10000_1: " + n_10000 + " Time needed (ms): " + sw.ElapsedMilliseconds);
 
             vectors = reader.readFromFileToArray(@"S:\CG\Aufgabe1\Aufgabe1\s_100000_1.dat");
-            DateTime start_100000 = DateTime.Now;
+            sw.Restart();
             for (int i = 0; i < vectors.Length - 1; i++)
             {
                 for (int j = i + 1; j < vectors.Length; j++)
@@ -58,8 +59,8 @@ namespace Aufgabe1
                     }
                 }
             }
-            DateTime end_100000 = DateTime.Now;
-            Console.WriteLine("Intersections at s_100000_1: " + n_100000 + " Time needed (ms): " + (end_100000 - start_100000).Milliseconds);
+            sw.Stop();
+            Console.WriteLine("Intersections at s_100000_1: " + n_100000 + " Time needed (ms): " + sw.ElapsedMilliseconds);
             Console.ReadLine();
         }
     }
