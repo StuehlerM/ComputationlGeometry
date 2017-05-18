@@ -25,9 +25,9 @@ namespace Aufgabe3
             this.line_2 = line_2;
         }
 
-        EventType eventType { get; }
-        Vector2 line_1 { get; }
-        Vector2 line_2 { get; }
+        public EventType eventType { get; }
+        public Vector2 line_1 { get; }
+        public Vector2 line_2 { get; }
 
         public Point getPoint()
         {
@@ -51,6 +51,13 @@ namespace Aufgabe3
                     break;
             }
             return null;
+        }
+
+        private void calculateIntersection()
+        {
+            double slope_1 = (line_1.end.y - line_1.start.y) / (line_1.end.x - line_1.start.x);
+            double slope_2 = (line_2.end.y - line_2.start.y) / (line_2.end.x - line_2.start.x);
+
         }
     }
 }

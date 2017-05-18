@@ -33,6 +33,7 @@ namespace Aufgabe3
                     case EventType.end:
 
                     case EventType.intersect:
+                        break;
                 }
             }
 
@@ -52,6 +53,9 @@ namespace Aufgabe3
         }
 
         private void TreatLeftEndpoint()
+        {
+
+        }
 
     }
 }
