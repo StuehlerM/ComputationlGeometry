@@ -15,8 +15,16 @@ namespace Aufgabe3
 
         public Vector2(double sx, double sy, double ex, double ey)
         {
-            start = new Point(sx, sy);
-            end = new Point(ex, ey);
+            if (sx < ex)
+            {
+                start = new Point(sx, sy);
+                end = new Point(ex, ey);
+            }
+            else
+            {
+                end = new Point(sx, sy);
+                start = new Point(ex, ey);
+            }
         }
 
         public bool CheckForIntersection(Vector2 v1, Vector2 v2)
