@@ -4,3 +4,9 @@ S:\CG\Aufgabe1\Aufgabe2\bin\Debug\Aufgabe2.pdb
 S:\CG\Aufgabe1\Aufgabe2\obj\Debug\Aufgabe2.csprojResolveAssemblyReference.cache
 S:\CG\Aufgabe1\Aufgabe2\obj\Debug\Aufgabe2.exe
 S:\CG\Aufgabe1\Aufgabe2\obj\Debug\Aufgabe2.pdb
+D:\Daten\Uni\Computational Geometry\Praktikum\Aufgabe1\Aufgabe2\obj\Debug\Aufgabe2.csprojResolveAssemblyReference.cache
+D:\Daten\Uni\Computational Geometry\Praktikum\Aufgabe1\Aufgabe2\obj\Debug\Aufgabe2.exe
+D:\Daten\Uni\Computational Geometry\Praktikum\Aufgabe1\Aufgabe2\obj\Debug\Aufgabe2.pdb
+D:\Daten\Uni\Computational Geometry\Praktikum\Aufgabe1\Aufgabe2\bin\Debug\Aufgabe2.exe.config
+D:\Daten\Uni\Computational Geometry\Praktikum\Aufgabe1\Aufgabe2\bin\Debug\Aufgabe2.exe
+D:\Daten\Uni\Computational Geometry\Praktikum\Aufgabe1\Aufgabe2\bin\Debug\Aufgabe2.pdb
