@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Aufgabe3
 {
-    class Point
+    public class Point
     {
         public double x { get; set; }
         public double y { get; set; }

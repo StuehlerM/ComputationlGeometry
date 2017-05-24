@@ -8,7 +8,7 @@ namespace Aufgabe3
 {
     enum EventType { begin, end, intersect };
 
-    class Event 
+    class Event : IComparable<Event>
     {
 
         public Event(EventType type, Vector2 line)
@@ -38,26 +38,92 @@ namespace Aufgabe3
                 case EventType.end:
                     return line_1.end;
                 case EventType.intersect:
-                    /*double delta = line_1.start * line_2.end - line_1.end* line_2.start;
-                    if (delta == 0)
-                        throw new ArgumentException("Lines are parallel");
-
-                    float x = (B2 * C1 - B1 * C2) / delta;
-                    float y = (A1 * C2 - A2 * C1) / delta;
-
-                    return line_1.start;*/
-                    break;
+                    return calculateIntersection();
                 default:
                     break;
             }
             return null;
         }
 
-        private void calculateIntersection()
+        private Point calculateIntersection()
         {
-            double slope_1 = (line_1.end.y - line_1.start.y) / (line_1.end.x - line_1.start.x);
-            double slope_2 = (line_2.end.y - line_2.start.y) / (line_2.end.x - line_2.start.x);
+            double A1 = line_1.end.y - line_1.start.y;
+            double B1 = line_1.start.x - line_1.end.x;
+            double C1 = A1 * line_1.start.x + B1 * line_1.start.y;
 
+            double A2 = line_2.end.y - line_2.start.y;
+            double B2 = line_2.start.x - line_2.end.x;
+            double C2 = A2 * line_2.start.x + B2 * line_2.start.y;
+
+            double delta = A1 * B2 - A2 * B1;
+
+            return new Point((B2 * C1 - B1 * C2) / delta, (A1 * C2 - A2 * C1) / delta);
+        }
+
+        /* Kleinerer x-Wert => weiter vorne in Reihenfolge
+         * Wenn x-Werte gleich sind, nach y-Werten sortieren
+         * Wenn y-Werte auch gleich sind (z.B. bei den 10/10ern), dann nach Endpunkt sortieren
+         * voll unübersichtlich, funktionert aber hoffentlich
+         */
+        int IComparable<Event>.CompareTo(Event other)
+        {
+            int retVal = 0;
+            double epsilon = 0.00000000001;
+            if (Math.Abs(this.getPoint().x - other.getPoint().x) > epsilon)
+            {
+                if (this.getPoint().x < other.getPoint().x)
+                {
+                    retVal = -1;
+                }
+                else if (this.getPoint().x > other.getPoint().x)
+                {
+                    retVal = 1;
+                }
+            }
+            else
+            {
+                if (Math.Abs(this.getPoint().y - other.getPoint().y) > epsilon)
+                {
+                    if (this.getPoint().y < other.getPoint().y)
+                    {
+                        retVal = -1;
+                    }
+                    else if (this.getPoint().y > other.getPoint().y)
+                    {
+                        retVal = 1;
+                    }
+                }
+                //Wenn Startpunkte der begin-Events gleich sind, nach Endpunkten sortieren
+   /*             else if (this.eventType == EventType.begin && other.eventType == EventType.begin)
+                {
+                    if (Math.Abs(this.line_1.end.x - other.line_1.end.x) > epsilon)
+                    {
+                        if (this.line_1.end.x < other.line_1.end.x)
+                        {
+                            retVal = -1;
+                        }
+                        else if (this.line_1.end.x > other.line_1.end.x)
+                        {
+                            retVal = 1;
+                        }
+                    }
+                    else
+                    {
+                        if (Math.Abs(this.line_1.end.y - other.line_1.end.y) > epsilon)
+                        {
+                            if (this.line_1.end.y < other.line_1.end.y)
+                            {
+                                retVal = -1;
+                            }
+                            else if (this.line_1.end.y > other.line_1.end.y)
+                            {
+                                retVal = 1;
+                            }
+                        }
+                    }
+                }*/
+            }
+         return retVal;
         }
     }
 }

@@ -6,10 +6,14 @@ using System.Threading.Tasks;
 
 namespace Aufgabe3
 {
-    class Vector2
+    public class Vector2 : IComparable<Vector2>
     {
         public Point start { get; set; }
         public Point end { get; set; }
+
+        public bool IsNull { get; set; }
+
+        double epsilon = 0.00000000001;
 
         //public static int insiders = 0;
 
@@ -25,47 +29,54 @@ namespace Aufgabe3
                 end = new Point(sx, sy);
                 start = new Point(ex, ey);
             }
+
+            IsNull = false;
         }
 
-        public bool CheckForIntersection(Vector2 v1, Vector2 v2)
+        public Vector2()
+        {
+            IsNull = true;
+        }
+
+        public bool CheckForIntersection(Vector2 v2)
         {
             bool intersect = false;
 
-            double ccw_v1_start = ccw(v1.start, v1.end, v2.start);
-            double ccw_v1_end = ccw(v1.start, v1.end, v2.end);
+            double ccw_v1_start = ccw(this.start, this.end, v2.start);
+            double ccw_v1_end = ccw(this.start, this.end, v2.end);
 
-            double ccw_v2_start = ccw(v2.start, v2.end, v1.start);
-            double ccw_v2_end = ccw(v2.start, v2.end, v1.end);
+            double ccw_v2_start = ccw(v2.start, v2.end, this.start);
+            double ccw_v2_end = ccw(v2.start, v2.end, this.end);
 
-            if(ccw_v1_start == 0 && ccw_v1_end == 0)
+            if ((Math.Abs(ccw_v1_start) <= epsilon) && (Math.Abs(ccw_v1_end) <= epsilon))
             {
-                if(CheckInside(v1, v2.start) || CheckInside(v1, v2.end))
+                if (CheckInside(v2.start) || CheckInside(v2.end))
                 {
                     intersect = true;
                 }
             }
-            else if((ccw_v1_start * ccw_v1_end <= 0) && (ccw_v2_start * ccw_v2_end <= 0))
+            else if ((ccw_v1_start * ccw_v1_end <= epsilon) && (ccw_v2_start * ccw_v2_end <= epsilon))
             {
                 intersect = true;
             }
-            
+
             return intersect;
         }
 
         double ccw(Point p, Point q, Point r)
         {
-            return ((p.x*q.y - p.y*q.x) + (q.x * r.y - q.y * r.x) + (p.y * r.x - p.x * r.y));
+            return ((p.x * q.y - p.y * q.x) + (q.x * r.y - q.y * r.x) + (p.y * r.x - p.x * r.y));
         }
 
-        bool CheckInside(Vector2 v, Point p)
+        bool CheckInside(Point p)
         {
             bool inside = false;
             double EPSILON = Math.Pow(10, -15);
 
-            double slope = ((v.end.y - v.start.y) / (v.end.x - v.start.x));
-            double yAxis = v.start.y - slope * v.start.x;
+            double slope = ((this.end.y - this.start.y) / (this.end.x - this.start.x));
+            double yAxis = this.start.y - slope * this.start.x;
 
-            if( Math.Abs(p.y - (slope*p.x + yAxis)) < EPSILON)
+            if (Math.Abs(p.y - (slope * p.x + yAxis)) < EPSILON)
             {
                 inside = true;
             }
@@ -73,9 +84,85 @@ namespace Aufgabe3
             return inside;
         }
 
+        public double CalculateValue(double x)
+        {
+            double slope = ((this.end.y - this.start.y) / (this.end.x - this.start.x));
+            double yAxis = this.start.y - slope * this.start.x;
+
+            return slope * x + yAxis;
+        }
+
         public override string ToString()
         {
-            return "Startpunkt: " + start.ToString() +  " Ende: " + end.ToString();
+            return "Startpunkt: " + start.ToString() + " Ende: " + end.ToString();
+        }
+
+        // Kleinerer y-Wert => weiter vorne in Reihenfolge
+        public int CompareTo(Vector2 other)
+        {
+            int retVal = 0;
+            if (this.Equals(other))
+            {
+                retVal = 0;
+            }
+            else if (this.CalculateValue(this.start.x) < other.CalculateValue(this.start.x))
+            {
+                retVal = -1;
+            }
+            else if (this.CalculateValue(this.start.x) > other.CalculateValue(this.start.x))
+            {
+                retVal = 1;
+            }
+            return retVal;
+        }
+
+        public int CompareTo(Vector2 other, double xPosition)
+        {
+            int retVal = 0;          
+            if (this.Equals(other))
+            {
+                retVal = 0;
+            }
+            else
+            {
+                double thisCalc = this.CalculateValue(xPosition);
+                double otherCalc = other.CalculateValue(xPosition);
+
+                //y-values are not identical 
+                if (Math.Abs(thisCalc - otherCalc) > epsilon)
+                {
+                    if (thisCalc < otherCalc)
+                    {
+                        retVal = -1;
+                    }
+                    else
+                    {
+                        retVal = 1;
+                    }
+                }
+                //y-values are identical
+                else if (Math.Abs(this.end.y - other.end.y) > epsilon)
+                {
+                    if (this.end.y < other.end.y)
+                    {
+                        retVal = -1;
+                    } else
+                    {
+                        retVal = 1;
+                    }
+                }
+                else
+                {
+                    if (this.end.x > other.end.x)
+                    {
+                        retVal = -1;
+                    } else
+                    {
+                        retVal = 1;
+                    }
+                }
+            }
+            return retVal;
         }
     }
 }
