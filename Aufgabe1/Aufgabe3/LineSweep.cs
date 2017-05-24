@@ -106,23 +106,30 @@ namespace Aufgabe3
         {
             outputList.Add(intersectEvent);
 
-            //segE1 is above segE2
+            //segE1 should be above segE2
             Vector2 segE1 = intersectEvent.line_1;
             Vector2 segE2 = intersectEvent.line_2;
 
             sweepLine.xPosition = (sweepLine.xPosition + intersectEvent.getPoint().x) / 2;
 
-            Vector2 segA = sweepLine.Above(segE1);
-            Vector2 segB = sweepLine.Below(segE2);
+            //make shure that segE1 is above segE2
+            if (segE1.CompareTo(segE2, sweepLine.xPosition) < 0)
+            {
+                Vector2 temp = segE1;
+                segE1 = segE2;
+                segE2 = temp;
+            }
 
-            /*
+            sweepLine.Switch(segE1, segE2);
+          
             double tempPosition = intersectEvent.getPoint().x;
             eventQueue.Remove(intersectEvent);
             sweepLine.xPosition = (tempPosition + eventQueue.FindMin().getPoint().x) / 2;
-            */
 
-            sweepLine.Switch(segE1, segE2);
-            sweepLine.xPosition = intersectEvent.getPoint().x;
+            Vector2 segA = sweepLine.Above(segE1);
+            Vector2 segB = sweepLine.Below(segE2);
+
+            sweepLine.xPosition = tempPosition;
 
 
             if (segA != null)
@@ -142,8 +149,6 @@ namespace Aufgabe3
                     eventQueue.Add(iEvent);
                 }
             }
-
-            eventQueue.Remove(intersectEvent);
         }
 
     }
