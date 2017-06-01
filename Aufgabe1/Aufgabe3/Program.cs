@@ -23,6 +23,7 @@ namespace Aufgabe3
             n_1000 = ls.StartSweep();
             sw.Stop();
             Console.WriteLine("Intersections at s_1000_10: " + n_1000 + " Time needed (ms): " + sw.ElapsedMilliseconds);
+            Console.ReadLine();
         }
     }
 }
