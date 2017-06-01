@@ -10,6 +10,11 @@ namespace Aufgabe2
     {
         static void Main(string[] args)
         {
+            SvgReader svgReader = new SvgReader();
+            svgReader.readSVG();
+
+            /*
+
             List<Vector2> edges = new List<Vector2>();
             Vector2 edge1 = new Vector2(7.0, 0.0, 8.0, 7.0);
             Vector2 edge2 = new Vector2(8.0, 7.0, 4.0, 9.0);
@@ -46,7 +51,7 @@ namespace Aufgabe2
             State state = new State("Testland", ter);
 
             Console.WriteLine(state.ToString());
-            Console.ReadLine();
+            Console.ReadLine();*/
         }
     }
 }

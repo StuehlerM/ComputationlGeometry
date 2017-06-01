@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Linq;
 
 namespace Aufgabe2
@@ -11,31 +8,46 @@ namespace Aufgabe2
     {
         public void readSVG()
         {
-            XDocument document = XDocument.Load(@"S:\CG\Aufgabe1\Aufgabe2\DeutschlandMitStaedten.svg");
-            XElement svg_Element = document.Root;
+            //Load xml
+            XDocument xdoc = XDocument.Load(@"..\..\DeutschlandMitStaedten.svg");
+            var paths = xdoc.Elements().Elements().Elements();
 
-            IEnumerable<XElement> test = from e1 in svg_Element.Elements("{http://www.w3.org/2000/svg}g")
-                                         select e1;
-            StringBuilder sb = new StringBuilder();
-            foreach (XElement ee in test)
+            foreach (var path in paths)
             {
-                // Get "Central" and "Capital"
-                sb.AppendLine(ee.Attribute("id").Value);
+                String dValue = path.Attribute("d").Value;
 
-                IEnumerable<XElement> test2 = from e2 in ee.Elements("{http://www.w3.org/2000/svg}g")
-                                              select e2;
-                foreach (XElement ee2 in test2)
+                List<Vector2> edges;
+
+                foreach(var line in dValue.Split(' '))
                 {
-                    sb.AppendLine("     Block No :" + ee2.Attribute("id").Value);
-                    IEnumerable<XElement> test3 = from ee3 in ee2.Elements("{http://www.w3.org/2000/svg}path")
-                                                  select ee3;
-                    foreach (XElement epath in test3)
+                    Point endPoint;
+                    switch (line[0])
                     {
-                        sb.AppendLine("     sPath  :" + epath.Attribute("d").Value);
+                        case 'M':
+                        case 'm':
+                            edges = new List<Vector2>();
+                            var point = line.Split(',');
+                            
+                            //endPoint = new Point();
+                            break;
+
                     }
+                            
+                    Console.WriteLine(line);
                 }
             }
-            //txtAll.Text = sb.ToString();
+
+            Console.WriteLine("WTF");
+
+        }
+
+        private Point Interpret(string line)
+        {
+            string[] point = line.Split(',');
+            
+
+
+            return null;
         }
     }
 }
