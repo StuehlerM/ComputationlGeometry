@@ -1,6 +1,0 @@
-D:\Daten\Uni\Computational Geometry\Praktikum\Aufgabe1\Aufgabe1\bin\Debug\Aufgabe1.exe.config
-D:\Daten\Uni\Computational Geometry\Praktikum\Aufgabe1\Aufgabe1\bin\Debug\Aufgabe1.exe
-D:\Daten\Uni\Computational Geometry\Praktikum\Aufgabe1\Aufgabe1\bin\Debug\Aufgabe1.pdb
-D:\Daten\Uni\Computational Geometry\Praktikum\Aufgabe1\Aufgabe1\obj\Debug\Aufgabe1.csprojResolveAssemblyReference.cache
-D:\Daten\Uni\Computational Geometry\Praktikum\Aufgabe1\Aufgabe1\obj\Debug\Aufgabe1.exe
-D:\Daten\Uni\Computational Geometry\Praktikum\Aufgabe1\Aufgabe1\obj\Debug\Aufgabe1.pdb
