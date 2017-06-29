@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Xml.Linq;
 
 namespace Aufgabe2
@@ -20,14 +21,15 @@ namespace Aufgabe2
                 String dValue = path.Attribute("d").Value;
                 string stateName = path.Attribute("id").Value;
 
-                State state = new State(stateName, createPolygon(dValue));
+                //writeToFile(createPolygons(dValue));
+                State state = new State(stateName, createPolygons(dValue));
                 states.Add(state);
             }
 
             return states;
         }
 
-        private List<Polygon> createPolygon(string subpath)
+        private List<Polygon> createPolygons(string subpath)
         {
             List<string> lines = new List<string>(subpath.Split(' '));
             List<Vector2> edges = null;
@@ -148,7 +150,7 @@ namespace Aufgabe2
 
             Point additionalPoint = null;
 
-            if (!Double.TryParse(yCoordinateString, out yCoordinate))
+            if (!Double.TryParse(yCoordinateString, NumberStyles.Any, CultureInfo.InvariantCulture, out yCoordinate))
             {
                 if (yCoordinateString.Contains("H"))
                 {
@@ -166,8 +168,10 @@ namespace Aufgabe2
                 {
                     return getAdditionalPoint(yCoordinateString, 'v', xCoordinate, currentPointy);
                 }
-
-
+            }
+            else
+            {
+                yCoordinate = currentPointy + Double.Parse(coordinates[1], CultureInfo.InvariantCulture);
             }
             Point nextCurrentPoint = new Point(xCoordinate, yCoordinate);
             return new Tuple<Point, Point>(nextCurrentPoint, additionalPoint);
@@ -209,5 +213,30 @@ namespace Aufgabe2
             Point nextCurrentPoint = new Point(xCoordinate, yCoordinate);
             return new Tuple<Point, Point>(nextCurrentPoint, additionalPoint);
         }
+
+        #region DEBUG
+
+        public void writeToFile(List<Polygon> polygons)
+        {
+            // Set a variable to the My Documents path.
+            string mydocpath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+
+            // Append text to an existing file named "WriteLines.txt".
+            using (StreamWriter outputFile = new StreamWriter(mydocpath + @"\Polygone.csv", true))
+            {
+                foreach (var polygon in polygons)
+                {
+                    foreach (var edge in polygon.edges)
+                    {
+                        outputFile.WriteLine(edge.start.x + "; " + edge.start.y);
+                    }
+                    outputFile.WriteLine("\n");
+                }
+
+            }
+
+        }
+
+        #endregion DEBUG
     }
 }
