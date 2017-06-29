@@ -11,7 +11,22 @@ namespace Aufgabe2
         static void Main(string[] args)
         {
             SvgReader svgReader = new SvgReader();
-            svgReader.readSVG();
+            List<State> states = svgReader.readSVG();
+
+            List<City> cities = svgReader.getCities();
+
+            foreach (var state in states)
+            {
+                foreach (var city in cities)
+                {
+                    if (state.pointInState(city.location))
+                    {
+                        Console.WriteLine(city.name + " is in " + state.name);
+                    }
+                }
+            }
+
+            Console.ReadKey();
 
             /*
 

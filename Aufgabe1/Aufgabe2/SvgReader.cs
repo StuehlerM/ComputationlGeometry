@@ -130,7 +130,6 @@ namespace Aufgabe2
             return new Point(x, y);
         }
 
-
         private Tuple<Point, Point> createPoint(string line, Point currentPoint)
         {
             double currentPointx = 0.0;
@@ -212,6 +211,43 @@ namespace Aufgabe2
             }
             Point nextCurrentPoint = new Point(xCoordinate, yCoordinate);
             return new Tuple<Point, Point>(nextCurrentPoint, additionalPoint);
+        }
+
+        public List<City> getCities()
+        {
+            XDocument xdoc = XDocument.Load(@"..\..\DeutschlandMitStaedten.svg");
+            var cityPaths = xdoc.Elements().Elements();
+            City city;
+            double x = 0, y = 0;
+            string id = "";
+
+            List<City> cities = new List<City>();
+
+            foreach (var cityPath in cityPaths)
+            {
+                foreach (var att in cityPath.Attributes())
+                {
+                    string line = att.ToString();
+                    if (line.Contains("cx"))
+                    {
+                        string[] splittedValues = line.Split('"');
+                        x = double.Parse(splittedValues[1], CultureInfo.InvariantCulture);
+                    }
+                    else if (line.Contains("cy"))
+                    {
+                        string[] splittedValues = line.Split('"');
+                        y = double.Parse(splittedValues[1], CultureInfo.InvariantCulture);
+                    }
+                    else if (line.Contains("id"))
+                    {
+                        string[] splittedValues = line.Split('"');
+                        id = splittedValues[1];
+                    }
+                }
+                cities.Add(new City(new Point(x, y), id));
+            }
+
+            return cities;
         }
 
         #region DEBUG
