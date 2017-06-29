@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Xml.Linq;
 
 namespace Aufgabe2
@@ -20,54 +21,58 @@ namespace Aufgabe2
                 string stateName = path.Attribute("id").Value;
 
                 State state = new State(stateName, createPolygon(dValue));
-                //state.name = stateName;
-
-              
-                
+                states.Add(state);
             }
 
-            Console.WriteLine("WTF");
-            return null;
+            return states;
 
         }
 
         private List<Polygon> createPolygon(string subpath)
         {
             List<string> lines = new List<string>(subpath.Split(' '));
-            List<Vector2> edges = new List<Vector2>();
+            List<Vector2> edges = null;
 
-            Point absStart;
+            List<Polygon> polygons = new List<Polygon>();
+
+            Point absStart = null;
             Point currentPoint = null;
 
             foreach (string line in lines)
             {
                 if (line.StartsWith("M") || line.StartsWith("m"))
                 {
-                    currentPoint = createStartPoint(line);
+                    currentPoint = createSinglePoint(line);
                     absStart = currentPoint;
+                    edges = new List<Vector2>();
                 }
                 else if (line.StartsWith("l"))
                 {
                     var points = createPoint(line, currentPoint);
 
-                    edges.Add(createEdge(points));
-                    
                     if (points.Item2 == null)
                     {
+                        edges.Add(new Vector2(currentPoint.x, currentPoint.y, points.Item1.x, points.Item1.y));
                         currentPoint = points.Item1;
                     }
                     else
                     {
+                        edges.Add(new Vector2(currentPoint.x, currentPoint.y, points.Item1.x, points.Item1.y));
+                        edges.Add(new Vector2(points.Item1.x, points.Item1.y, points.Item2.x, points.Item2.y));
                         currentPoint = points.Item2;
                     }
                 }
-                else if (line.StartsWith("z"))
+                else if (line.StartsWith("z") || line.StartsWith("Z"))
                 {
+                    edges.Add(new Vector2(currentPoint.x, currentPoint.y, absStart.x, absStart.y));
 
+                    Polygon polygon = new Polygon(edges);
+
+                    polygons.Add(polygon);
                 }
             }
 
-            return null;
+            return polygons;
         }
 
         private Vector2 createEdge(Tuple<Point, Point> tuple)
@@ -75,11 +80,11 @@ namespace Aufgabe2
             return new Vector2(tuple.Item1.x, tuple.Item1.y, tuple.Item1.y, tuple.Item2.x);
         }
 
-        private Point createStartPoint(string line)
+        private Point createSinglePoint(string line)
         {
             string[] coordinates = line.Substring(1).Split(',');
-            double x = Double.Parse(coordinates[0]);
-            double y = Double.Parse(coordinates[1]);
+            double x = Double.Parse(coordinates[0], CultureInfo.InvariantCulture);
+            double y = Double.Parse(coordinates[1], CultureInfo.InvariantCulture);
             return new Point(x, y);
         }
 
@@ -95,7 +100,7 @@ namespace Aufgabe2
             }
 
             string[] coordinates = line.Substring(1).Split(',');
-            double xCoordinate = currentPointx + Double.Parse(coordinates[0]);
+            double xCoordinate = currentPointx + Double.Parse(coordinates[0], CultureInfo.InvariantCulture);
 
             string yCoordinateString = coordinates[1];
             double yCoordinate;
@@ -104,14 +109,24 @@ namespace Aufgabe2
 
             if (!Double.TryParse(yCoordinateString, out yCoordinate))
             {
-                if (yCoordinateString.Contains("H") || yCoordinateString.Contains("h"))
+                if (yCoordinateString.Contains("H"))
+                {
+                    return getAdditionalPoint(yCoordinateString, 'H', xCoordinate, currentPointy);
+                }
+                else if (yCoordinateString.Contains("h"))
                 {
                     return getAdditionalPoint(yCoordinateString, 'h', xCoordinate, currentPointy);
                 }
-                else if (yCoordinateString.Contains("V") || yCoordinateString.Contains("v"))
+                else if (yCoordinateString.Contains("V"))
+                {
+                    return getAdditionalPoint(yCoordinateString, 'V', xCoordinate, currentPointy);
+                }
+                else if (yCoordinateString.Contains("v"))
                 {
                     return getAdditionalPoint(yCoordinateString, 'v', xCoordinate, currentPointy);
                 }
+
+
             }
             Point nextCurrentPoint = new Point(xCoordinate, yCoordinate);
             return new Tuple<Point, Point>(nextCurrentPoint, additionalPoint);
@@ -119,21 +134,34 @@ namespace Aufgabe2
 
         private Tuple<Point, Point> getAdditionalPoint(string line, char separator, double xCoordinate, double yCoordinate)
         {
-            string[] additionalPointString = line.Split(separator);
-            yCoordinate = yCoordinate + Double.Parse(additionalPointString[0]);
+            string[] additionalPointString;
             Point additionalPoint = null;
+
+            double additionalX, additionalY;
 
             switch (separator)
             {
                 case 'H':
-                case 'h':
-                    double additionalX = xCoordinate + Double.Parse(additionalPointString[1]);
+                    additionalPointString = line.Split(separator);
+                    additionalX = Double.Parse(additionalPointString[1], CultureInfo.InvariantCulture);
                     additionalPoint = new Point(additionalX, yCoordinate);
                     break;
-                
+                case 'h':
+                    additionalPointString = line.Split(separator);
+                    yCoordinate = yCoordinate + Double.Parse(additionalPointString[0], CultureInfo.InvariantCulture);
+                    additionalX = xCoordinate + Double.Parse(additionalPointString[1], CultureInfo.InvariantCulture);
+                    additionalPoint = new Point(additionalX, yCoordinate);
+                    break;
+
                 case 'V':
+                    additionalPointString = line.Split(separator);
+                    additionalY = Double.Parse(additionalPointString[1], CultureInfo.InvariantCulture);
+                    additionalPoint = new Point(xCoordinate, additionalY);
+                    break;
                 case 'v':
-                    double additionalY = yCoordinate + Double.Parse(additionalPointString[1]);
+                    additionalPointString = line.Split(separator);
+                    yCoordinate = yCoordinate + Double.Parse(additionalPointString[0], CultureInfo.InvariantCulture);
+                    additionalY = yCoordinate + Double.Parse(additionalPointString[1], CultureInfo.InvariantCulture);
                     additionalPoint = new Point(xCoordinate, additionalY);
                     break;
             }
