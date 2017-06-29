@@ -17,33 +17,13 @@ namespace Aufgabe2
             foreach (var path in paths)
             {
                 String dValue = path.Attribute("d").Value;
-                String stateName = path.Attribute("id").Value;
+                string stateName = path.Attribute("id").Value;
 
-                //State state = new State();
+                State state = new State(stateName, createPolygon(dValue));
                 //state.name = stateName;
 
-                List<Vector2> edges;
-
-                foreach (var line in dValue.Split(' '))
-                {
-                    Point currentPoint;
-                    switch (line[0])
-                    {
-                        case 'M':
-                        case 'm':
-                            edges = new List<Vector2>();
-
-                            var point = line.Split(',');
-                            /*if ()
-
-
-                                currentPoint = new Point(); */
-                            break;
-
-                    }
-
-                    Console.WriteLine(line);
-                }
+              
+                
             }
 
             Console.WriteLine("WTF");
@@ -51,37 +31,63 @@ namespace Aufgabe2
 
         }
 
-        private Polygon createPolygon(string subpath)
+        private List<Polygon> createPolygon(string subpath)
         {
             List<string> lines = new List<string>(subpath.Split(' '));
+            List<Vector2> edges = new List<Vector2>();
+
             Point absStart;
-            Point currentPoint;
+            Point currentPoint = null;
 
             foreach (string line in lines)
             {
                 if (line.StartsWith("M") || line.StartsWith("m"))
                 {
-                    //currentPoint = createPoint(line);
-                    //absStart = currentPoint;
+                    currentPoint = createStartPoint(line);
+                    absStart = currentPoint;
                 }
                 else if (line.StartsWith("l"))
                 {
-                    // TODO HERE!!!!
+                    var points = createPoint(line, currentPoint);
+
+                    edges.Add(createEdge(points));
+                    
+                    if (points.Item2 == null)
+                    {
+                        currentPoint = points.Item1;
+                    }
+                    else
+                    {
+                        currentPoint = points.Item2;
+                    }
+                }
+                else if (line.StartsWith("z"))
+                {
+
                 }
             }
 
             return null;
         }
 
-        private Vector2 createEdge(Point start, Point end)
+        private Vector2 createEdge(Tuple<Point, Point> tuple)
         {
-            return null;
+            return new Vector2(tuple.Item1.x, tuple.Item1.y, tuple.Item1.y, tuple.Item2.x);
+        }
+
+        private Point createStartPoint(string line)
+        {
+            string[] coordinates = line.Substring(1).Split(',');
+            double x = Double.Parse(coordinates[0]);
+            double y = Double.Parse(coordinates[1]);
+            return new Point(x, y);
         }
 
         private Tuple<Point, Point> createPoint(string line, Point currentPoint)
         {
             double currentPointx = 0.0;
             double currentPointy = 0.0;
+
             if (currentPoint != null)
             {
                 currentPointx = currentPoint.x;
