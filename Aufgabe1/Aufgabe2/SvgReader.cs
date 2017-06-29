@@ -25,7 +25,6 @@ namespace Aufgabe2
             }
 
             return states;
-
         }
 
         private List<Polygon> createPolygon(string subpath)
@@ -40,15 +39,49 @@ namespace Aufgabe2
 
             foreach (string line in lines)
             {
-                if (line.StartsWith("M") || line.StartsWith("m"))
+                if (line.StartsWith("M"))
                 {
                     currentPoint = createSinglePoint(line);
                     absStart = currentPoint;
                     edges = new List<Vector2>();
                 }
+
+                else if (line.StartsWith("m"))
+                {
+                    // means m should be a "M". #ThanksSVG
+                    if (polygons.Count == 0)
+                    {
+                        currentPoint = createSinglePoint(line);
+                        absStart = currentPoint;
+                        edges = new List<Vector2>();
+                    }
+                    else
+                    {
+                        currentPoint = createSinglePoint(line, currentPoint);
+                        absStart = currentPoint;
+                    }
+                    edges = new List<Vector2>();
+                }
+
                 else if (line.StartsWith("l"))
                 {
                     var points = createPoint(line, currentPoint);
+
+                    if (points.Item2 == null)
+                    {
+                        edges.Add(new Vector2(currentPoint.x, currentPoint.y, points.Item1.x, points.Item1.y));
+                        currentPoint = points.Item1;
+                    }
+                    else
+                    {
+                        edges.Add(new Vector2(currentPoint.x, currentPoint.y, points.Item1.x, points.Item1.y));
+                        edges.Add(new Vector2(points.Item1.x, points.Item1.y, points.Item2.x, points.Item2.y));
+                        currentPoint = points.Item2;
+                    }
+                }
+                else if (line.StartsWith("L"))
+                {
+                    var points = createPoint(line, null);
 
                     if (points.Item2 == null)
                     {
@@ -87,6 +120,14 @@ namespace Aufgabe2
             double y = Double.Parse(coordinates[1], CultureInfo.InvariantCulture);
             return new Point(x, y);
         }
+        private Point createSinglePoint(string line, Point currentPoint)
+        {
+            string[] coordinates = line.Substring(1).Split(',');
+            double x = currentPoint.x + Double.Parse(coordinates[0], CultureInfo.InvariantCulture);
+            double y = currentPoint.y + Double.Parse(coordinates[1], CultureInfo.InvariantCulture);
+            return new Point(x, y);
+        }
+
 
         private Tuple<Point, Point> createPoint(string line, Point currentPoint)
         {
