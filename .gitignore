@@ -251,3 +251,8 @@ paket-files/
 .idea/
 *.sln.iml
 /Aufgabe5/Thumbs.db
+Debug
+/Aufgabe1/Aufgabe1/bin
+/Aufgabe1/Aufgabe1/obj
+/Aufgabe1/Aufgabe2/bin
+/Aufgabe1/Aufgabe2/obj
