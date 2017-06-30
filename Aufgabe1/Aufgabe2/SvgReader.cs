@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
 using System.Xml.Linq;
 
 namespace Aufgabe2
@@ -17,71 +19,122 @@ namespace Aufgabe2
             foreach (var path in paths)
             {
                 String dValue = path.Attribute("d").Value;
-                String stateName = path.Attribute("id").Value;
+                string stateName = path.Attribute("id").Value;
 
-                //State state = new State();
-                //state.name = stateName;
-
-                List<Vector2> edges;
-
-                foreach (var line in dValue.Split(' '))
-                {
-                    Point currentPoint;
-                    switch (line[0])
-                    {
-                        case 'M':
-                        case 'm':
-                            edges = new List<Vector2>();
-
-                            var point = line.Split(',');
-                            /*if ()
-
-
-                                currentPoint = new Point(); */
-                            break;
-
-                    }
-
-                    Console.WriteLine(line);
-                }
+                //writeToFile(createPolygons(dValue));
+                State state = new State(stateName, createPolygons(dValue));
+                states.Add(state);
             }
 
-            Console.WriteLine("WTF");
-            return null;
-
+            return states;
         }
 
-        private Polygon createPolygon(string subpath)
+        private List<Polygon> createPolygons(string subpath)
         {
             List<string> lines = new List<string>(subpath.Split(' '));
-            Point absStart;
-            Point currentPoint;
+            List<Vector2> edges = null;
+
+            List<Polygon> polygons = new List<Polygon>();
+
+            Point absStart = null;
+            Point currentPoint = null;
 
             foreach (string line in lines)
             {
-                if (line.StartsWith("M") || line.StartsWith("m"))
+                if (line.StartsWith("M"))
                 {
-                    //currentPoint = createPoint(line);
-                    //absStart = currentPoint;
+                    currentPoint = createSinglePoint(line);
+                    absStart = currentPoint;
+                    edges = new List<Vector2>();
                 }
+
+                else if (line.StartsWith("m"))
+                {
+                    // means m should be a "M". #ThanksSVG
+                    if (polygons.Count == 0)
+                    {
+                        currentPoint = createSinglePoint(line);
+                        absStart = currentPoint;
+                        edges = new List<Vector2>();
+                    }
+                    else
+                    {
+                        currentPoint = createSinglePoint(line, currentPoint);
+                        absStart = currentPoint;
+                    }
+                    edges = new List<Vector2>();
+                }
+
                 else if (line.StartsWith("l"))
                 {
-                    // TODO HERE!!!!
+                    var points = createPoint(line, currentPoint);
+
+                    if (points.Item2 == null)
+                    {
+                        edges.Add(new Vector2(currentPoint.x, currentPoint.y, points.Item1.x, points.Item1.y));
+                        currentPoint = points.Item1;
+                    }
+                    else
+                    {
+                        edges.Add(new Vector2(currentPoint.x, currentPoint.y, points.Item1.x, points.Item1.y));
+                        edges.Add(new Vector2(points.Item1.x, points.Item1.y, points.Item2.x, points.Item2.y));
+                        currentPoint = points.Item2;
+                    }
+                }
+                else if (line.StartsWith("L"))
+                {
+                    var points = createPoint(line, null);
+
+                    if (points.Item2 == null)
+                    {
+                        edges.Add(new Vector2(currentPoint.x, currentPoint.y, points.Item1.x, points.Item1.y));
+                        currentPoint = points.Item1;
+                    }
+                    else
+                    {
+                        edges.Add(new Vector2(currentPoint.x, currentPoint.y, points.Item1.x, points.Item1.y));
+                        edges.Add(new Vector2(points.Item1.x, points.Item1.y, points.Item2.x, points.Item2.y));
+                        currentPoint = points.Item2;
+                    }
+                }
+                else if (line.StartsWith("z") || line.StartsWith("Z"))
+                {
+                    edges.Add(new Vector2(currentPoint.x, currentPoint.y, absStart.x, absStart.y));
+
+                    Polygon polygon = new Polygon(edges);
+
+                    polygons.Add(polygon);
                 }
             }
 
-            return null;
+            return polygons;
         }
 
-        private Vector2 createEdge(Point start, Point end)
+        private Vector2 createEdge(Tuple<Point, Point> tuple)
         {
-            return null;
+            return new Vector2(tuple.Item1.x, tuple.Item1.y, tuple.Item1.y, tuple.Item2.x);
+        }
+
+        private Point createSinglePoint(string line)
+        {
+            string[] coordinates = line.Substring(1).Split(',');
+            double x = Double.Parse(coordinates[0], CultureInfo.InvariantCulture);
+            double y = Double.Parse(coordinates[1], CultureInfo.InvariantCulture);
+            return new Point(x, y);
+        }
+        private Point createSinglePoint(string line, Point currentPoint)
+        {
+            string[] coordinates = line.Substring(1).Split(',');
+            double x = currentPoint.x + Double.Parse(coordinates[0], CultureInfo.InvariantCulture);
+            double y = currentPoint.y + Double.Parse(coordinates[1], CultureInfo.InvariantCulture);
+            return new Point(x, y);
         }
 
         private Tuple<Point, Point> createPoint(string line, Point currentPoint)
         {
             double currentPointx = 0.0;
             double currentPointy = 0.0;
+
             if (currentPoint != null)
             {
                 currentPointx = currentPoint.x;
@@ -89,23 +142,35 @@ namespace Aufgabe2
             }
 
             string[] coordinates = line.Substring(1).Split(',');
-            double xCoordinate = currentPointx + Double.Parse(coordinates[0]);
+            double xCoordinate = currentPointx + Double.Parse(coordinates[0], CultureInfo.InvariantCulture);
 
             string yCoordinateString = coordinates[1];
             double yCoordinate;
 
             Point additionalPoint = null;
 
-            if (!Double.TryParse(yCoordinateString, out yCoordinate))
+            if (!Double.TryParse(yCoordinateString, NumberStyles.Any, CultureInfo.InvariantCulture, out yCoordinate))
             {
-                if (yCoordinateString.Contains("H") || yCoordinateString.Contains("h"))
+                if (yCoordinateString.Contains("H"))
+                {
+                    return getAdditionalPoint(yCoordinateString, 'H', xCoordinate, currentPointy);
+                }
+                else if (yCoordinateString.Contains("h"))
                 {
                     return getAdditionalPoint(yCoordinateString, 'h', xCoordinate, currentPointy);
                 }
-                else if (yCoordinateString.Contains("V") || yCoordinateString.Contains("v"))
+                else if (yCoordinateString.Contains("V"))
+                {
+                    return getAdditionalPoint(yCoordinateString, 'V', xCoordinate, currentPointy);
+                }
+                else if (yCoordinateString.Contains("v"))
                 {
                     return getAdditionalPoint(yCoordinateString, 'v', xCoordinate, currentPointy);
                 }
+            }
+            else
+            {
+                yCoordinate = currentPointy + Double.Parse(coordinates[1], CultureInfo.InvariantCulture);
             }
             Point nextCurrentPoint = new Point(xCoordinate, yCoordinate);
             return new Tuple<Point, Point>(nextCurrentPoint, additionalPoint);
@@ -113,26 +178,101 @@ namespace Aufgabe2
 
         private Tuple<Point, Point> getAdditionalPoint(string line, char separator, double xCoordinate, double yCoordinate)
         {
-            string[] additionalPointString = line.Split(separator);
-            yCoordinate = yCoordinate + Double.Parse(additionalPointString[0]);
+            string[] additionalPointString;
             Point additionalPoint = null;
+
+            double additionalX, additionalY;
 
             switch (separator)
             {
                 case 'H':
-                case 'h':
-                    double additionalX = xCoordinate + Double.Parse(additionalPointString[1]);
+                    additionalPointString = line.Split(separator);
+                    additionalX = Double.Parse(additionalPointString[1], CultureInfo.InvariantCulture);
                     additionalPoint = new Point(additionalX, yCoordinate);
                     break;
-                
+                case 'h':
+                    additionalPointString = line.Split(separator);
+                    yCoordinate = yCoordinate + Double.Parse(additionalPointString[0], CultureInfo.InvariantCulture);
+                    additionalX = xCoordinate + Double.Parse(additionalPointString[1], CultureInfo.InvariantCulture);
+                    additionalPoint = new Point(additionalX, yCoordinate);
+                    break;
+
                 case 'V':
+                    additionalPointString = line.Split(separator);
+                    additionalY = Double.Parse(additionalPointString[1], CultureInfo.InvariantCulture);
+                    additionalPoint = new Point(xCoordinate, additionalY);
+                    break;
                 case 'v':
-                    double additionalY = yCoordinate + Double.Parse(additionalPointString[1]);
+                    additionalPointString = line.Split(separator);
+                    yCoordinate = yCoordinate + Double.Parse(additionalPointString[0], CultureInfo.InvariantCulture);
+                    additionalY = yCoordinate + Double.Parse(additionalPointString[1], CultureInfo.InvariantCulture);
                     additionalPoint = new Point(xCoordinate, additionalY);
                     break;
             }
             Point nextCurrentPoint = new Point(xCoordinate, yCoordinate);
             return new Tuple<Point, Point>(nextCurrentPoint, additionalPoint);
         }
+
+        public List<City> getCities()
+        {
+            XDocument xdoc = XDocument.Load(@"..\..\DeutschlandMitStaedten.svg");
+            var cityPaths = xdoc.Elements().Elements();
+            City city;
+            double x = 0, y = 0;
+            string id = "";
+
+            List<City> cities = new List<City>();
+
+            foreach (var cityPath in cityPaths)
+            {
+                foreach (var att in cityPath.Attributes())
+                {
+                    string line = att.ToString();
+                    if (line.Contains("cx"))
+                    {
+                        string[] splittedValues = line.Split('"');
+                        x = double.Parse(splittedValues[1], CultureInfo.InvariantCulture);
+                    }
+                    else if (line.Contains("cy"))
+                    {
+                        string[] splittedValues = line.Split('"');
+                        y = double.Parse(splittedValues[1], CultureInfo.InvariantCulture);
+                    }
+                    else if (line.Contains("id"))
+                    {
+                        string[] splittedValues = line.Split('"');
+                        id = splittedValues[1];
+                    }
+                }
+                cities.Add(new City(new Point(x, y), id));
+            }
+
+            return cities;
+        }
+
+        #region DEBUG
+
+        public void writeToFile(List<Polygon> polygons)
+        {
+            // Set a variable to the My Documents path.
+            string mydocpath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+
+            // Append text to an existing file named "WriteLines.txt".
+            using (StreamWriter outputFile = new StreamWriter(mydocpath + @"\Polygone.csv", true))
+            {
+                foreach (var polygon in polygons)
+                {
+                    foreach (var edge in polygon.edges)
+                    {
+                        outputFile.WriteLine(edge.start.x + "; " + edge.start.y);
+                    }
+                    outputFile.WriteLine("\n");
+                }
+
+            }
+
+        }
+
+        #endregion DEBUG
     }
 }
