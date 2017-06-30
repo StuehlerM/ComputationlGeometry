@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Aufgabe3
 {
-    public class SweepLine : ICollection<Vector2>, IList<Vector2>
+    public class SweepLine
     {
         #region Segment
         public class Segment : ICollection<Vector2>, IList<Vector2>
@@ -39,13 +39,6 @@ namespace Aufgabe3
                     if (this.RightHand == null)
                     ((this.RightHand = new SweepLine.Segment(item, this.SweepLine)).Parent = this).Reconstruct(true);
                 else this.RightHand.Add(item);
-            }
-
-            public void Clear()
-            {
-                if (this.LeftHand != null) this.LeftHand.Clear();
-                if (this.RightHand != null) this.RightHand.Clear();
-                this.LeftHand = this.RightHand = null;
             }
 
             public bool Contains(Vector2 item)
@@ -298,46 +291,13 @@ namespace Aufgabe3
             else this.RootNode.Add(item);
         }
 
-        public void Clear()
-        {
-            if (this.RootNode == null) return;
-            this.RootNode.Clear();
-            this.RootNode = null;
-        }
-
         public bool Contains(Vector2 item) { return this.RootNode == null ? false : this.RootNode.Contains(item); }
-
-        public void CopyTo(Vector2[] array, int arrayIndex)
-        {
-            if (array == null) throw new ArgumentNullException("array");
-            if (arrayIndex < 0) throw new ArgumentOutOfRangeException("arrayIndex");
-            if ((array.Length <= arrayIndex) || (this.RootNode != null && array.Length < arrayIndex + this.RootNode.Count))
-                throw new ArgumentException();
-
-            if (this.RootNode != null)
-                this.RootNode.CopyTo(array, arrayIndex);
-        }
 
         public int Count { get { return this.RootNode.Count; } }
 
-        public bool IsReadOnly { get { return false; } }
-
         public bool Remove(Vector2 item) { return this.RootNode == null ? false : this.RootNode.Remove(item); }
 
-        public IEnumerator<Vector2> GetEnumerator()
-        {
-            if (this.RootNode != null)
-                foreach (var item in this.RootNode)
-                    yield return item;
-            else
-                yield break;
-        }
-
-        IEnumerator IEnumerable.GetEnumerator() { return GetEnumerator(); }
-
         public int IndexOf(Vector2 item) { return this.RootNode != null ? this.RootNode.IndexOf(item) : -1; }
-
-        public void Insert(int index, Vector2 item) { throw new InvalidOperationException(); }
 
         public void RemoveAt(int index) { if (this.RootNode != null) this.RootNode.RemoveAt(index); }
 
