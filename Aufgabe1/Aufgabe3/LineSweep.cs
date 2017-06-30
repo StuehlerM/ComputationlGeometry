@@ -28,19 +28,25 @@ namespace Aufgabe3
             while(eventQueue.Count > 0)
             {
                 Event currentEvent = eventQueue.FindMin();
-                //Console.WriteLine("Count: " + eventQueue.Count);
+
                 switch(currentEvent.eventType)
                 {
                     case EventType.begin:
+                        Console.WriteLine("Begin");
                         TreatLeftEndpoint(currentEvent);
                         break;
                     case EventType.end:
+                        Console.WriteLine("End");
                         TreatRightEndpoint(currentEvent);
                         break;
                     case EventType.intersect:
+                        Console.WriteLine("Intersect");
                         TreatIntersection(currentEvent);
                         break;
                 }
+                Console.WriteLine("Sweepline position: " + sweepLine.xPosition);
+                Console.WriteLine("Sweepline count: " + sweepLine.Count);
+                Console.WriteLine();
             }
 
             return outputList.Count;
@@ -151,6 +157,7 @@ namespace Aufgabe3
                     eventQueue.Add(iEvent);
                 }
             }
+            eventQueue.Remove(intersectEvent);
         }
 
     }

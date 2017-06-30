@@ -13,7 +13,7 @@ namespace Aufgabe3
 
         public bool IsNull { get; set; }
 
-        double epsilon = 0.0000000000000001;
+        double epsilon = 0.0000000000001;
 
         //public static int insiders = 0;
 

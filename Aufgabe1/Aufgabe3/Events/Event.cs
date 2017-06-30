@@ -68,7 +68,7 @@ namespace Aufgabe3
         int IComparable<Event>.CompareTo(Event other)
         {
             int retVal = 0;
-            double epsilon = 0.00000000000000001;
+            double epsilon = 0.00000000000001;
             if (Math.Abs(this.getPoint().x - other.getPoint().x) > epsilon)
             {
                 if (this.getPoint().x < other.getPoint().x)

@@ -11,7 +11,8 @@
 *.userprefs
 
 # Build results
-[Dd]ebug/
+debug/
+Debug/
 [Dd]ebugPublic/
 [Rr]elease/
 [Rr]eleases/
@@ -250,6 +251,7 @@ paket-files/
 # JetBrains Rider
 .idea/
 *.sln.iml
+Debug
 /Aufgabe5/Thumbs.db
 Debug
 /Aufgabe1/Aufgabe1/bin
