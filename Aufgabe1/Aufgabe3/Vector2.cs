@@ -10,6 +10,7 @@ namespace Aufgabe3
     {
         public Point start { get; set; }
         public Point end { get; set; }
+        public double xPosition = 0;
 
         public bool IsNull { get; set; }
 
@@ -48,14 +49,14 @@ namespace Aufgabe3
             double ccw_v2_start = ccw(v2.start, v2.end, this.start);
             double ccw_v2_end = ccw(v2.start, v2.end, this.end);
 
-            if ((Math.Abs(ccw_v1_start) <= epsilon) && (Math.Abs(ccw_v1_end) <= epsilon))
+            if ((ccw_v1_start == 0) && (ccw_v1_end == 0))
             {
                 if (CheckInside(v2.start) || CheckInside(v2.end))
                 {
                     intersect = true;
                 }
             }
-            else if ((ccw_v1_start * ccw_v1_end <= epsilon) && (ccw_v2_start * ccw_v2_end <= epsilon))
+            else if ((ccw_v1_start * ccw_v1_end <= 0) && (ccw_v2_start * ccw_v2_end <= 0))
             {
                 intersect = true;
             }
@@ -100,16 +101,17 @@ namespace Aufgabe3
         // Kleinerer y-Wert => weiter vorne in Reihenfolge
         public int CompareTo(Vector2 other)
         {
+            double usedPosition = this.xPosition > other.xPosition ? this.xPosition : other.xPosition;
             int retVal = 0;
             if (this.Equals(other))
             {
                 retVal = 0;
             }
-            else if (this.CalculateValue(this.start.x) < other.CalculateValue(this.start.x))
+            else if (this.CalculateValue(usedPosition) < other.CalculateValue(usedPosition))
             {
                 retVal = -1;
             }
-            else if (this.CalculateValue(this.start.x) > other.CalculateValue(this.start.x))
+            else if (this.CalculateValue(usedPosition) > other.CalculateValue(usedPosition))
             {
                 retVal = 1;
             }
@@ -129,7 +131,7 @@ namespace Aufgabe3
                 double otherCalc = other.CalculateValue(xPosition);
 
                 //y-values are not identical 
-                if (Math.Abs(thisCalc - otherCalc) > epsilon)
+                //if (Math.Abs(thisCalc - otherCalc) > epsilon)
                 {
                     if (thisCalc < otherCalc)
                     {
@@ -141,7 +143,7 @@ namespace Aufgabe3
                     }
                 }
                 //y-values are identical
-                else if (Math.Abs(this.end.y - other.end.y) > epsilon)
+               /* else if (Math.Abs(this.end.y - other.end.y) > epsilon)
                 {
                     if (this.end.y < other.end.y)
                     {
@@ -160,7 +162,7 @@ namespace Aufgabe3
                     {
                         retVal = 1;
                     }
-                }
+                }*/
             }
             return retVal;
         }

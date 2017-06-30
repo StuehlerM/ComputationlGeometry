@@ -10,7 +10,7 @@ namespace Aufgabe3
     public class SweepLine
     {
         #region Segment
-        public class Segment : ICollection<Vector2>, IList<Vector2>
+        public class Segment
         {
             public Segment(Vector2 value, SweepLine sweepLine)
             {
@@ -119,7 +119,6 @@ namespace Aufgabe3
                         yield return item;
             }
 
-            IEnumerator IEnumerable.GetEnumerator() { return GetEnumerator(); }
 
             void Reconstruct(bool recursive)
             {
@@ -316,6 +315,7 @@ namespace Aufgabe3
 
         public Vector2 Above(Vector2 item)
         {
+
             Segment seg = getSegment(item);
 
             if (seg.RightHand != null)

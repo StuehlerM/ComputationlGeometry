@@ -68,9 +68,9 @@ namespace Aufgabe3
         int IComparable<Event>.CompareTo(Event other)
         {
             int retVal = 0;
-            double epsilon = 0.00000000000001;
-            if (Math.Abs(this.getPoint().x - other.getPoint().x) > epsilon)
-            {
+            //double epsilon = 0.00000000000001;
+            //if (Math.Abs(this.getPoint().x - other.getPoint().x) > epsilon)
+            //{
                 if (this.getPoint().x < other.getPoint().x)
                 {
                     retVal = -1;
@@ -79,11 +79,11 @@ namespace Aufgabe3
                 {
                     retVal = 1;
                 }
-            }
+            //}
             else
             {
-                if (Math.Abs(this.getPoint().y - other.getPoint().y) > epsilon)
-                {
+                //if (Math.Abs(this.getPoint().y - other.getPoint().y) > epsilon)
+               // {
                     if (this.getPoint().y < other.getPoint().y)
                     {
                         retVal = -1;
@@ -92,7 +92,7 @@ namespace Aufgabe3
                     {
                         retVal = 1;
                     }
-                }
+                //}
                 //Wenn Startpunkte der begin-Events gleich sind, nach Endpunkten sortieren
    /*             else if (this.eventType == EventType.begin && other.eventType == EventType.begin)
                 {
