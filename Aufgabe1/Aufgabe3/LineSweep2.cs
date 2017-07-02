@@ -11,7 +11,7 @@ namespace Aufgabe3
     {
         TreeSet<Event> eventQueue = new TreeSet<Event>();
         TreeSet<Vector2> sweepLine = new TreeSet<Vector2>();
-        List<Event> outputList = new List<Event>();
+        TreeSet<Event> outputList = new TreeSet<Event>();
         List<Vector2> lines = new List<Vector2>();
         double xPosition = 0.0;
 
