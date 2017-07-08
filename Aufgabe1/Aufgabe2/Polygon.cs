@@ -26,6 +26,22 @@ namespace Aufgabe2
             return Math.Abs(area / 2);
         }
 
+        public Point getInsidePoint()
+        {
+            double xCenter = 0.0;
+            double yCenter = 0.0;
+
+            double numberPoints = edges.Count;
+
+            foreach(Vector2 vec in edges)
+            {
+                xCenter += vec.start.x;
+                yCenter += vec.start.y;
+            }
+
+            return new Point(xCenter/ numberPoints, yCenter/ numberPoints);
+        }
+
         public override string ToString()
         {
             return "Polygon besteht aus " + edges.Count() + " Kanten und hat eine Fläche von " + this.area() + ".";
