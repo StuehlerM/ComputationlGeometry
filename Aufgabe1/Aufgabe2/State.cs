@@ -16,11 +16,44 @@ namespace Aufgabe2
         public double area()
         {
             double area = 0.0;
+
             foreach (Polygon pol in territory)
             {
                 area += pol.area();
             }
             return area;
+        }
+
+
+        public double area(List<State> allStates)
+        {
+            double area = 0.0;
+            double subtractArea = 0.0;
+            foreach(State state in allStates)
+            {
+                if (state != this)
+                {
+                    foreach (Polygon pol in state.territory)
+                    {
+                        if (pointInState(pol.getInsidePoint()))
+                        {
+                            subtractArea += state.area();
+                        }
+                    }
+                }
+            }
+
+            foreach (Polygon pol in territory)
+            {
+                area += pol.area();
+            }
+
+            if (subtractArea > area)
+            {
+                subtractArea = 0;
+            }
+      
+            return area - subtractArea;
         }
 
         // -1 out polygon, 0 on polygon, 1 in polygon
@@ -31,19 +64,27 @@ namespace Aufgabe2
             foreach (var polygon in territory)
             {
                 int polygonLength = polygon.edges.Count, i = 0;
-               
+
                 // x, y for tested point.
-                double pointX = point.x, pointY = point.y;
+                double pointX = point.x;
+                double pointY = point.y;
                 // start / end point for the current polygon segment.
                 double startX, startY, endX, endY;
+
                 Vector2 lastEdge = polygon.edges[polygon.edges.Count-1];
                 endX = lastEdge.end.x;
                 endY = lastEdge.end.y;
+
                 while (i < polygonLength)
                 {
-                    startX = endX; startY = endY;
+                    startX = endX;
+                    startY = endY;
+
                     lastEdge = polygon.edges[i++];
-                    endX = lastEdge.end.x; endY = lastEdge.end.y;
+
+                    endX = lastEdge.end.x;
+                    endY = lastEdge.end.y;
+
                     //
                     inside ^= (endY > pointY ^ startY > pointY) /* ? pointY inside [startY;endY] segment ? */
                               && /* if so, test if it is under the segment */
