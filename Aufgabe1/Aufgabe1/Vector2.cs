@@ -47,7 +47,7 @@ namespace Aufgabe1
             return ((p.x*q.y - p.y*q.x) + (q.x * r.y - q.y * r.x) + (p.y * r.x - p.x * r.y));
         }
 
-        bool CheckInside(Vector2 v, Point p)
+        public bool CheckInside(Vector2 v, Point p)
         {
             bool inside = false;
             double EPSILON = Math.Pow(10, -15);

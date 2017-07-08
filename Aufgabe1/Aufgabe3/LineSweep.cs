@@ -10,9 +10,14 @@ namespace Aufgabe3
     class LineSweep
     {
         TreeSet<Event> eventQueue = new TreeSet<Event>();
-        SweepLine sweepLine = new SweepLine();
-        List<Event> outputList = new List<Event>();
+        TreeSet<Vector2> sweepLine = new TreeSet<Vector2>();
+        TreeSet<Event> outputList = new TreeSet<Event>();
         List<Vector2> lines = new List<Vector2>();
+        double xPosition = 0.0;
+  
+        int bEvent = 0;
+        int eEvent = 0;
+        int iEvent = 0;
         
 
         public LineSweep(List<Vector2> lines)
@@ -32,26 +37,19 @@ namespace Aufgabe3
                 switch(currentEvent.eventType)
                 {
                     case EventType.begin:
-                        Console.WriteLine("Begin");
                         TreatLeftEndpoint(currentEvent);
+                        bEvent++;
                         break;
                     case EventType.end:
-                        Console.WriteLine("End");
                         TreatRightEndpoint(currentEvent);
+                        eEvent++;
                         break;
                     case EventType.intersect:
-                        Console.WriteLine("Intersect");
                         TreatIntersection(currentEvent);
+                        iEvent++;
                         break;
                 }
-                Console.WriteLine("Sweepline position: " + sweepLine.xPosition);
-                if (sweepLine.RootNode != null)
-                {
-                    Console.WriteLine("Sweepline count: " + sweepLine.Count);
-                }
-                Console.WriteLine();
             }
-
             return outputList.Count;
         }
 
@@ -69,46 +67,63 @@ namespace Aufgabe3
         private void TreatLeftEndpoint(Event beginEvent)
         {
             Vector2 segE = beginEvent.line_1;
-            sweepLine.xPosition = beginEvent.getPoint().x;
+            xPosition = beginEvent.getPoint().x;
+            segE.xPosition = xPosition;
             sweepLine.Add(segE);
-            Vector2 segA = sweepLine.Above(segE);
-            Vector2 segB = sweepLine.Below(segE);
-            if (segA != null)
+ 
+            try
             {
+                Vector2 segA = sweepLine.Successor(segE);
                 if (segE.CheckForIntersection(segA))
                 {
                     Event iEvent = new Event(EventType.intersect, segA, segE);
                     eventQueue.Add(iEvent);
                 }
             }
-
-            if (segB != null)
+            catch (Exception)
             {
+            }
+
+            try
+            {
+                Vector2 segB = sweepLine.Predecessor(segE);
                 if (segE.CheckForIntersection(segB))
                 {
                     Event iEvent = new Event(EventType.intersect, segE, segB);
                     eventQueue.Add(iEvent);
                 }
             }
+            catch (Exception)
+            {
+            }
+
             eventQueue.Remove(beginEvent);
         }
 
         private void TreatRightEndpoint(Event endEvent)
         {
             Vector2 segE = endEvent.line_1;
-            sweepLine.xPosition = endEvent.getPoint().x;
-            Vector2 segA = sweepLine.Above(segE);
-            Vector2 segB = sweepLine.Below(segE);
+            xPosition = endEvent.getPoint().x;
+            segE.xPosition = xPosition;
 
-            sweepLine.Remove(segE);
-            if (segA != null && segB != null)
+
+            try
             {
+                Vector2 segA = sweepLine.Successor(segE);
+                Vector2 segB = sweepLine.Predecessor(segE);
+
                 if (segA.CheckForIntersection(segB))
                 {
                     Event iEvent = new Event(EventType.intersect, segA, segB);
-                    if(!eventQueue.Contains(iEvent)) { eventQueue.Add(iEvent); }
+                    if (!eventQueue.Contains(iEvent))
+                    { eventQueue.Add(iEvent); }
                 }
             }
+            catch (Exception)
+            {
+            }
+
+            sweepLine.Remove(segE);
             eventQueue.Remove(endEvent);
         }
 
@@ -121,54 +136,56 @@ namespace Aufgabe3
             Vector2 segE1 = intersectEvent.line_1;
             Vector2 segE2 = intersectEvent.line_2;
 
-            sweepLine.xPosition = (sweepLine.xPosition + tempPosition) / 2;
+            xPosition = (xPosition + tempPosition) / 2;
+            segE1.xPosition = xPosition;
+            segE2.xPosition = xPosition;
 
             sweepLine.Remove(segE1);
             sweepLine.Remove(segE2);
           
             eventQueue.Remove(intersectEvent);
-            sweepLine.xPosition = (tempPosition + eventQueue.FindMin().getPoint().x) / 2;
+
+            xPosition = (tempPosition + eventQueue.FindMin().getPoint().x) / 2;
+            segE1.xPosition = xPosition;
+            segE2.xPosition = xPosition;
 
             sweepLine.Add(segE1);
             sweepLine.Add(segE2);
 
-            if(segE2.CompareTo(segE1, sweepLine.xPosition) < 1)
+            xPosition = tempPosition;
+            try
             {
-                Vector2 temp = segE2;
-                segE2 = segE1;
-                segE1 = temp;
-            }
-
-            Vector2 segA = sweepLine.Above(segE2);
-            Vector2 segB = sweepLine.Below(segE1);
-
-            sweepLine.xPosition = tempPosition;
-
-
-            if (segA != null)
-            {
+                Vector2 segA = sweepLine.Successor(segE2);
                 if (segE2.CheckForIntersection(segA))
                 {
                     Event iEvent = new Event(EventType.intersect, segA, segE2);
-                    if (iEvent.getPoint().x > sweepLine.xPosition)
+                    if (iEvent.getPoint().x > xPosition)
                     {
                         eventQueue.Add(iEvent);
                     }
                 }
             }
-
-            if (segB != null)
+            catch
             {
+            }
+
+            try
+            {
+                Vector2 segB = sweepLine.Predecessor(segE1);
                 if (segE1.CheckForIntersection(segB))
                 {
                     Event iEvent = new Event(EventType.intersect, segE1, segB);
-                    if (iEvent.getPoint().x > sweepLine.xPosition)
+                    if (iEvent.getPoint().x > xPosition)
                     {
                         eventQueue.Add(iEvent);
                     }
                 }
             }
-        }
+            catch
+            {
+            }
 
+            
+        }
     }
 }
