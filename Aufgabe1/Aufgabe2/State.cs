@@ -63,15 +63,13 @@ namespace Aufgabe2
 
             foreach (var polygon in territory)
             {
-                int polygonLength = polygon.edges.Count, i = 0;
+                int polygonLength = polygon.edges.Count;
+                int i = 0;
 
-                // x, y for tested point.
-                double pointX = point.x;
-                double pointY = point.y;
-                // start / end point for the current polygon segment.
                 double startX, startY, endX, endY;
 
                 Vector2 lastEdge = polygon.edges[polygon.edges.Count-1];
+
                 endX = lastEdge.end.x;
                 endY = lastEdge.end.y;
 
@@ -86,9 +84,9 @@ namespace Aufgabe2
                     endY = lastEdge.end.y;
 
                     //
-                    inside ^= (endY > pointY ^ startY > pointY) /* ? pointY inside [startY;endY] segment ? */
+                    inside ^= (endY > point.y ^ startY > point.y) // pointY inside [startY;endY] segment ? */
                               && /* if so, test if it is under the segment */
-                              ((pointX - endX) < (pointY - endY) * (startX - endX) / (startY - endY));
+                              ((point.x - endX) < (point.y - endY) * (startX - endX) / (startY - endY));
                 }
             }
             return inside;
