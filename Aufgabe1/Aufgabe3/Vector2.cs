@@ -12,12 +12,6 @@ namespace Aufgabe3
         public Point end { get; set; }
         public double xPosition = 0;
 
-        public bool IsNull { get; set; }
-
-        double epsilon = 0.0000000000001;
-
-        //public static int insiders = 0;
-
         public Vector2(double sx, double sy, double ex, double ey)
         {
             if (sx < ex)
@@ -30,14 +24,8 @@ namespace Aufgabe3
                 end = new Point(sx, sy);
                 start = new Point(ex, ey);
             }
-
-            IsNull = false;
         }
 
-        public Vector2()
-        {
-            IsNull = true;
-        }
 
         public bool CheckForIntersection(Vector2 v2)
         {
@@ -118,9 +106,10 @@ namespace Aufgabe3
             return retVal;
         }
 
+        //TODO entfernen, wenn nicht gebraucht
         public int CompareTo(Vector2 other, double xPosition)
         {
-            int retVal = 0;          
+            int retVal = 0;
             if (this.Equals(other))
             {
                 retVal = 0;
@@ -130,8 +119,6 @@ namespace Aufgabe3
                 double thisCalc = this.CalculateValue(xPosition);
                 double otherCalc = other.CalculateValue(xPosition);
 
-                //y-values are not identical 
-                //if (Math.Abs(thisCalc - otherCalc) > epsilon)
                 {
                     if (thisCalc < otherCalc)
                     {
@@ -142,27 +129,7 @@ namespace Aufgabe3
                         retVal = 1;
                     }
                 }
-                //y-values are identical
-               /* else if (Math.Abs(this.end.y - other.end.y) > epsilon)
-                {
-                    if (this.end.y < other.end.y)
-                    {
-                        retVal = -1;
-                    } else
-                    {
-                        retVal = 1;
-                    }
-                }
-                else
-                {
-                    if (this.end.x > other.end.x)
-                    {
-                        retVal = -1;
-                    } else
-                    {
-                        retVal = 1;
-                    }
-                }*/
+
             }
             return retVal;
         }

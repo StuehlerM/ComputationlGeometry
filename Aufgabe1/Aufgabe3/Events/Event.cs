@@ -62,68 +62,31 @@ namespace Aufgabe3
 
         /* Kleinerer x-Wert => weiter vorne in Reihenfolge
          * Wenn x-Werte gleich sind, nach y-Werten sortieren
-         * Wenn y-Werte auch gleich sind (z.B. bei den 10/10ern), dann nach Endpunkt sortieren
-         * voll unübersichtlich, funktionert aber hoffentlich
          */
         int IComparable<Event>.CompareTo(Event other)
         {
             int retVal = 0;
-            //double epsilon = 0.00000000000001;
-            //if (Math.Abs(this.getPoint().x - other.getPoint().x) > epsilon)
-            //{
-                if (this.getPoint().x < other.getPoint().x)
+
+            if (this.getPoint().x < other.getPoint().x)
+            {
+                retVal = -1;
+            }
+            else if (this.getPoint().x > other.getPoint().x)
+            {
+                retVal = 1;
+            }
+            else
+            {
+                if (this.getPoint().y < other.getPoint().y)
                 {
                     retVal = -1;
                 }
-                else if (this.getPoint().x > other.getPoint().x)
+                else if (this.getPoint().y > other.getPoint().y)
                 {
                     retVal = 1;
                 }
-            //}
-            else
-            {
-                //if (Math.Abs(this.getPoint().y - other.getPoint().y) > epsilon)
-               // {
-                    if (this.getPoint().y < other.getPoint().y)
-                    {
-                        retVal = -1;
-                    }
-                    else if (this.getPoint().y > other.getPoint().y)
-                    {
-                        retVal = 1;
-                    }
-                //}
-                //Wenn Startpunkte der begin-Events gleich sind, nach Endpunkten sortieren
-   /*             else if (this.eventType == EventType.begin && other.eventType == EventType.begin)
-                {
-                    if (Math.Abs(this.line_1.end.x - other.line_1.end.x) > epsilon)
-                    {
-                        if (this.line_1.end.x < other.line_1.end.x)
-                        {
-                            retVal = -1;
-                        }
-                        else if (this.line_1.end.x > other.line_1.end.x)
-                        {
-                            retVal = 1;
-                        }
-                    }
-                    else
-                    {
-                        if (Math.Abs(this.line_1.end.y - other.line_1.end.y) > epsilon)
-                        {
-                            if (this.line_1.end.y < other.line_1.end.y)
-                            {
-                                retVal = -1;
-                            }
-                            else if (this.line_1.end.y > other.line_1.end.y)
-                            {
-                                retVal = 1;
-                            }
-                        }
-                    }
-                }*/
             }
-         return retVal;
+            return retVal;
         }
     }
 }
