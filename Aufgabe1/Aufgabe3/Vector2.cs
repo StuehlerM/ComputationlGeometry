@@ -87,6 +87,8 @@ namespace Aufgabe3
         }
 
         // Kleinerer y-Wert => weiter vorne in Reihenfolge
+        // Es wird immer die größere xPosition der Strecken zur Berechnung des y-Wertes genommen,
+        // da diese der aktuellen Position der Sweepline entspricht
         public int CompareTo(Vector2 other)
         {
             double usedPosition = this.xPosition > other.xPosition ? this.xPosition : other.xPosition;
@@ -102,34 +104,6 @@ namespace Aufgabe3
             else if (this.CalculateValue(usedPosition) > other.CalculateValue(usedPosition))
             {
                 retVal = 1;
-            }
-            return retVal;
-        }
-
-        //TODO entfernen, wenn nicht gebraucht
-        public int CompareTo(Vector2 other, double xPosition)
-        {
-            int retVal = 0;
-            if (this.Equals(other))
-            {
-                retVal = 0;
-            }
-            else
-            {
-                double thisCalc = this.CalculateValue(xPosition);
-                double otherCalc = other.CalculateValue(xPosition);
-
-                {
-                    if (thisCalc < otherCalc)
-                    {
-                        retVal = -1;
-                    }
-                    else
-                    {
-                        retVal = 1;
-                    }
-                }
-
             }
             return retVal;
         }

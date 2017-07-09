@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Aufgabe1
 {
+    // Stell eine Strecke dar
     class Vector2
     {
         public Point start { get; set; }
@@ -17,6 +18,8 @@ namespace Aufgabe1
             end = new Point(ex, ey);
         }
 
+
+        // Prüft mittels CCW ob v1 und v2 sich schneiden
         public bool CheckForIntersection(Vector2 v1, Vector2 v2)
         {
             bool intersect = false;
@@ -42,11 +45,16 @@ namespace Aufgabe1
             return intersect;
         }
 
+        /*  < 0  wenn r rechts von der Gerade pq liegt
+         *  0    wenn r auf pq liegt
+         *  > 0  wenn r links von pq liegt
+         */
         double ccw(Point p, Point q, Point r)
         {
             return ((p.x*q.y - p.y*q.x) + (q.x * r.y - q.y * r.x) + (p.y * r.x - p.x * r.y));
         }
 
+        // Prüft ob p auf der Strecke v liegt
         public bool CheckInside(Vector2 v, Point p)
         {
             bool inside = false;

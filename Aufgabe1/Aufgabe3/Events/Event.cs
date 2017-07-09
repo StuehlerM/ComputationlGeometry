@@ -10,7 +10,7 @@ namespace Aufgabe3
 
     class Event : IComparable<Event>
     {
-
+        // Konstruktor für Begin- und Endevent
         public Event(EventType type, Vector2 line)
         {
             this.eventType = type;
@@ -18,6 +18,7 @@ namespace Aufgabe3
             this.line_2 = null;
         }
 
+        // Konstruktor für Intersectionevent
         public Event(EventType type, Vector2 line_1, Vector2 line_2)
         {
             this.eventType = type;

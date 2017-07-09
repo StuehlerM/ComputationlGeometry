@@ -30,6 +30,7 @@ namespace Aufgabe3
             // Sortiert Start- und Endevents in Eventqueue
             InitializeEventQueue();
 
+            // Sortiertes Abarbeiten der Events
             while(eventQueue.Count > 0)
             {
                 Event currentEvent = eventQueue.FindMin();
@@ -132,10 +133,14 @@ namespace Aufgabe3
             outputList.Add(intersectEvent);
             double tempPosition = intersectEvent.getPoint().x;
 
-            //segE1 should be above segE2
             Vector2 segE1 = intersectEvent.line_1;
             Vector2 segE2 = intersectEvent.line_2;
 
+
+            /*  Tauschen der Positionen in der Sweepline erfordert Entfernen und Hinzufügen der Segmente.
+             *  Da die korrekte Reihenfolge in der Sweepline an der Stelle des Schnittpunktes nicht ermittelt werden kann,
+             *  müssen die Segmente kurz vor dem Schnittpunkt entfernt und kurz nach dem Schnittpunkt eingefügt werden.
+             */
             xPosition = (xPosition + tempPosition) / 2;
             segE1.xPosition = xPosition;
             segE2.xPosition = xPosition;
